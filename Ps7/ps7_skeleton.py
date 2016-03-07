@@ -13,10 +13,6 @@ class AdoptionCenter:
         self.species_types={}
         self.species_types=species_types
 
-
-
-
-
     def get_number_of_species(self, animal):
         if animal in self.species_types.keys():
             return self.species_types[animal]
@@ -39,11 +35,6 @@ class AdoptionCenter:
                 self.species_types.pop(species)
 
 
-
-
-
-
-
 class Adopter:
     """ 
     Adopters represent people interested in adopting a species.
@@ -51,14 +42,25 @@ class Adopter:
     simply the number of species that the shelter has of that species.
     """
     def __init__(self, name, desired_species):
-        # Your Code Here 
-    def get_name(self):
-        # Your Code Here 
-    def get_desired_species(self):
-        # Your Code Here 
-    def get_score(self, adoption_center):
-        # Your Code Here 
+        self.name = name
+        self.desired_species = desired_species
 
+    def get_name(self):
+
+        return self.name
+
+    def get_desired_species(self):
+
+        return self.desired_species
+
+    def get_score(self, adoption_center):
+
+        count = 0
+        sp=self.desired_species.split(' ')
+        for specie in sp:
+            if adoption_center.get_number_of_species(specie):
+                count += adoption_center.get_number_of_species(specie)
+        return float(count)
 
 
 class FlexibleAdopter(Adopter):
