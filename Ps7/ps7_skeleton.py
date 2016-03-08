@@ -55,7 +55,7 @@ class Adopter:
 
     def get_score(self, adoption_center):
 
-        count = 0
+        count = 0.0
         sp=self.desired_species.split(' ')
         for specie in sp:
             if adoption_center.get_number_of_species(specie):
@@ -70,7 +70,16 @@ class FlexibleAdopter(Adopter):
     considered_species is a list containing the other species the adopter will consider
     Their score should be 1x their desired species + .3x all of their desired species
     """
-    # Your Code Here, should contain an __init__ and a get_score method.
+    def __init__(self, name, desired_species, considered_species):
+        Adopter.__init__(self, name, desired_species)
+        self.considered_species=considered_species
+
+    def get_score(self, adoption_center):
+        count = 0.0
+        for cs in self.considered_species:
+            count+=adoption_center.get_number_of_species(cs)*0.3
+
+        return float(count+Adopter.get_score(self, adoption_center))
 
 
 class FearfulAdopter(Adopter):
@@ -80,7 +89,32 @@ class FearfulAdopter(Adopter):
     be a bit more reluctant to go there due to the presence of the feared species.
     Their score should be 1x number of desired species - .3x the number of feared species
     """
-    # Your Code Here, should contain an __init__ and a get_score method.
+    def __init__(self, name, desired_species, feared_species):
+        Adopter.__init__(self, name, desired_species)
+        self.feared_species=feared_species
+
+    def get_score(self, adoption_center):
+
+        result = float(Adopter.get_score(self, adoption_center)- adoption_center.get_number_of_species(self.feared_species)*0.3)
+
+        if result > 0:
+            return result
+        else:
+            return 0.0
+
+
+
+ad=AdoptionCenter("NY",{"dog":1,"cat":1,"horse":1},(1,1))
+fa=FearfulAdopter("boaz","fish","horse")
+flix=FlexibleAdopter("Carmit","dog",["cat","fish"])
+
+print fa.get_score(ad)
+print flix.get_score(ad)
+
+
+
+
+'''
 
 
 class AllergicAdopter(Adopter):
@@ -131,4 +165,6 @@ def get_adopters_for_advertisement(adoption_center, list_of_adopters, n):
     The function returns a list of the top n scoring Adopters from list_of_adopters (in numerical order of score)
     """
     # Your Code Here 
+
+'''
 
