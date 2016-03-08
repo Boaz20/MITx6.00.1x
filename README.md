@@ -3,5 +3,6 @@
 
 # MITx 6.00.1x - problems-
 
-Currently only PSE6.
+PSE6
 
+Partially PSE7
