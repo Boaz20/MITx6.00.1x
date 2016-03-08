@@ -112,11 +112,6 @@ print fa.get_score(ad)
 print flix.get_score(ad)
 
 
-
-
-'''
-
-
 class AllergicAdopter(Adopter):
     """
     An AllergicAdopter is extremely allergic to a one or more species and cannot
@@ -124,7 +119,16 @@ class AllergicAdopter(Adopter):
     these animals, they will not go there.
     Score should be 0 if the center contains any of the animals, or 1x number of desired animals if not
     """
-    # Your Code Here, should contain an __init__ and a get_score method.
+    def __init__(self, name, desired_species, allergic_species):
+        Adopter.__init__(self, name, desired_species)
+        self.allergic_species = allergic_species
+
+    def get_score(self, adoption_center):
+        for sp in self.allergic_species:
+            if adoption_center.get_number_of_species(sp):
+                return 0.0
+
+        return float(Adopter.get_score(self, adoption_center))
 
 
 class MedicatedAllergicAdopter(AllergicAdopter):
@@ -135,7 +139,28 @@ class MedicatedAllergicAdopter(AllergicAdopter):
     To do this, first examine what species the AdoptionCenter has that the MedicatedAllergicAdopter is allergic to, then compare them to the medicine_effectiveness dictionary. 
     Take the lowest medicine_effectiveness found for these species, and multiply that value by the Adopter's calculate score method.
     """
-    # Your Code Here, should contain an __init__ and a get_score method.
+    def __init__(self, name, desired_species, allergic_species, medicine_effectiveness):
+        AllergicAdopter.__init__(self, name, desired_species, allergic_species)
+        self.medicine_effectiveness = medicine_effectiveness.copy()
+
+    def get_score(self, adoption_center):
+        low = 1.0
+        adoptionSpecies = adoption_center.get_species_count()
+        for item in adoptionSpecies:
+            if item in self.allergic_species and item in self.medicine_effectiveness.keys():
+                if low > self.medicine_effectiveness[item]:
+                    low = self.medicine_effectiveness[item]
+            elif item in self.allergic_species and not (item in self.medicine_effectiveness.keys()):
+                low = 0.0
+
+        return low*Adopter.get_score(self, adoption_center)
+
+
+
+
+
+
+
 
 
 class SluggishAdopter(Adopter):
@@ -166,5 +191,5 @@ def get_adopters_for_advertisement(adoption_center, list_of_adopters, n):
     """
     # Your Code Here 
 
-'''
+
 
